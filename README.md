@@ -6,9 +6,16 @@ The generated CSVs will also be cleaned up of write errors present in the origin
 Just run go from terminal in the script folder and run the "main.py" passing as argument the input folder that contains the original .tsf file and the output folder where all the generated csv will be placed 
 
 ## Requirements
+
 In order for the script to run properly, you must install the numpy package before starting it.
 If you dont have numpy, just run:
-    >>> pip3 install numpy
+```sh
+ pip3 install numpy
+```
+   
 
 ## Example
-    >>> python3 main.py ./input_folder ./output_folder
+```sh
+ python3 main.py ./input_folder ./output_folder
+```
+   
