@@ -1,5 +1,6 @@
 # Script to generate a CSV file from the .tsf GWR iGrav file
 This script loads raw iGravs data files and converts them to the CSV format.
+The generated CSVs will also be cleaned up of write errors present in the original files such as NaN-only rows or time jumps due to GPS connection
 
 ## Usage
 
