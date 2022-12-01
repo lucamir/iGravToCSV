@@ -8,14 +8,16 @@ from numpy import asarray, savetxt
 
 
 class iGrav:
+    # find all the .tsf inside the input directory (even in the sub directory)
     def get_all_tfs(self, input_folder):
         paths_list = glob(input_folder + "/**/*.tsf", recursive=True)
         if len(paths_list) <= 0:
-            print("There's no .tsf file")
+            print("[ERROR]: There's no .tsf file")
             sys.exit()
         else:
             return paths_list
 
+    # from a .tsf file get only the content without the header
     def get_content(self, path):
         with open(path, "r") as file:
             content = file.readlines()
@@ -26,6 +28,7 @@ class iGrav:
                         start_idx += 1
                     return content[start_idx:]
 
+    # process the file and write the content in CSV format in the output file
     def process(self, file_path, output_path):
         output_path = self.get_output_path(file_path, output_path)
         content = self.get_content(file_path)
@@ -39,6 +42,7 @@ class iGrav:
                     last_dt = date
                     self.append_row_in_file([date, *columns], output_path)
 
+    #  validate each content line and remove the NaN row or the row that dont have a correct datetime
     def data_row_validator(self, row):
         if "\x00" not in row:
             data = split(r"\s{2,}", row.strip())
@@ -46,18 +50,21 @@ class iGrav:
                 try:
                     return data
                 except Exception as e:
-                    print(f"{e} | [data_row_validator]: Date formatting error")
+                    print(f"[ERROR]: Error on formatting date | {e}")
         return None
 
+    # append a array in a file using CSV format with numpy
     def append_row_in_file(self, data, output_file):
         output = asarray([[str(item) for item in data]])
         with open(output_file, "a") as file:
             savetxt(file, output, fmt="%s", delimiter=",", newline="\n")
 
+    #  reformat the datetime in YYYY-MM-DD HH:mm:ss
     def format_datetime(self, string):
         date = string.split(" ")
         return datetime.strptime(f"{'-'.join(date[:3])} {':'.join(date[3:])}", "%Y-%m-%d %H:%M:%S")
 
+    # from the input path and the output path generate the new CSV file path (get only the filename from the input path)
     def get_output_path(self, input_path, output_path):
         output = output_path
         if not output.endswith(os.path.sep):
@@ -75,7 +82,7 @@ def main():
         for path in file_list:
             igrav.process(path, output_path)
     else:
-        print("[Error]: Input or Output path doesn't exist!")
+        print("[ERROR]: Input or Output path doesn't exist!")
 
 
 if __name__ == "__main__":
