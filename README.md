@@ -4,7 +4,7 @@ This script loads the .tsf file generated from the GWR superconducting relative 
 The generated CSVs will also be cleaned up of write errors present in the original files such as NaN-only rows or time jumps due to GPS connection
 
 ## Usage
-Just run go from terminal in the script folder and run the <ins>**"main.py"**</ins> passing as argument the input folder that contains the original .tsf file and the output folder where all the generated csv will be placed 
+Just go in the script folder with terminal and run the <ins>**"main.py"**</ins> passing as argument the input folder that contains the original .tsf file and the output folder where all the generated csv will be placed 
 
 ## Requirements
 
