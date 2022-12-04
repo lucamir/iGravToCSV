@@ -20,3 +20,4 @@ If you dont have numpy, just run:
  python3 main.py ./input_folder ./output_folder
 ```
    
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Y8Y4GTFUB)
