@@ -1,3 +1,4 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/lucamir/igravtocsv/badge)](https://www.codefactor.io/repository/github/lucamir/igravtocsv)
 # Script to generate a CSV file from the iGrav .tsf files
 This script loads the .tsf file generated from the GWR superconducting relative gravimeter iGrav and converts them to the CSV format. <br>
 The generated CSVs will also be cleaned up of write errors present in the original files such as NaN-only rows or time jumps due to GPS connection
