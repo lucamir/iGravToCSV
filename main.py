@@ -17,6 +17,35 @@ class iGrav:
         else:
             return paths_list
 
+    # from a .tsf file get the header with channels and units measured by the device
+    def get_header(self, path):
+        with open(path, "r") as file:
+            header = []
+            content = file.readlines()
+            for i, line in enumerate(content):
+                if "[CHANNELS]" in line:  # get all the channels that the device measure
+                    start_idx = i + 1
+                    end_idx = start_idx
+                    while len(content[end_idx]) > 1:
+                        channel = split(r":", content[end_idx].strip())[-1]
+                        end_idx += 1
+                        header.append(channel)
+                if "[UNITS]" in line:  # get measure units and add to the header
+                    counter = 0
+                    header_len = len(header)
+                    start_idx = i + 1
+                    end_idx = start_idx
+                    while len(content[end_idx]) > 1 and counter < header_len:
+                        unit = content[end_idx].strip()
+                        header[counter] = f"{header[counter]} ({unit})"
+                        counter += 1
+                        end_idx += 1
+            timestamp = header[-1]
+            header.pop(-1)
+            header.insert(0, timestamp)
+
+            return header
+
     # from a .tsf file get only the content without the header
     def get_content(self, path):
         with open(path, "r") as file:
@@ -31,6 +60,8 @@ class iGrav:
     # process the file and write the content in CSV format in the output file
     def process(self, file_path, output_path):
         output_path = self.get_output_path(file_path, output_path)
+        header = self.get_header(file_path)
+        self.append_row_in_file(header, output_path)  # add header in the output csv file
         content = self.get_content(file_path)
         last_dt = None
         for line in content:
@@ -42,7 +73,7 @@ class iGrav:
                     last_dt = date
                     self.append_row_in_file([date, *columns], output_path)
 
-    #  validate each content line and remove the NaN row or the row that dont have a correct datetime
+    # validate each content line and remove the NaN row or the row that dont have a correct datetime
     def data_row_validator(self, row):
         if "\x00" not in row:
             data = split(r"\s{2,}", row.strip())
